@@ -1,0 +1,113 @@
+// Prisma schema — MySQL
+// Semua konten website (project, sertifikat, pendidikan, pengalaman, pesan)
+// disimpan di sini supaya bisa ditambah/diubah kapan saja tanpa mengubah kode.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+/// Kategori project: dipakai untuk filter di halaman /projects
+enum ProjectCategory {
+  ACADEMIC
+  WORK
+  PERSONAL
+}
+
+/// Status pendidikan: ongoing = masih kuliah, GRADUATED = sudah lulus
+enum EducationStatus {
+  ONGOING
+  GRADUATED
+}
+
+model Project {
+  id              Int             @id @default(autoincrement())
+  slug            String          @unique
+  title           String
+  category        ProjectCategory @default(ACADEMIC)
+  summary         String          @db.VarChar(500)
+  businessProblem String?         @db.Text
+  description     String          @db.Text
+  result          String?         @db.VarChar(500)
+  stack           String          // comma-separated, mis: "Node.js,Express.js,MySQL"
+  coverImage      String?         // path/URL gambar utama
+  role            String?
+  period          String?
+  featured        Boolean         @default(false)
+  sortOrder       Int             @default(0)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  images          ProjectImage[]
+
+  @@index([category])
+}
+
+/// Galeri foto tambahan per project — 1 project bisa punya banyak gambar,
+/// tinggal tambah baris baru kapan saja (misal saat project dilanjutkan).
+model ProjectImage {
+  id        Int      @id @default(autoincrement())
+  projectId Int
+  url       String
+  caption   String?
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId])
+}
+
+model Certificate {
+  id          Int      @id @default(autoincrement())
+  title       String
+  issuer      String
+  date        String?
+  image       String?
+  description String?  @db.VarChar(500)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+}
+
+model Education {
+  id          Int             @id @default(autoincrement())
+  degree      String
+  institution String
+  startYear   String
+  endYear     String?
+  status      EducationStatus @default(ONGOING)
+  gpa         String?
+  description String?         @db.Text
+  sortOrder   Int             @default(0)
+  createdAt   DateTime        @default(now())
+}
+
+model Experience {
+  id          Int      @id @default(autoincrement())
+  company     String
+  role        String
+  period      String
+  points      String   @db.Text // dipisah baris baru (\n) untuk tiap bullet point
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+}
+
+model Skill {
+  id       Int    @id @default(autoincrement())
+  category String // mis: "Software & Tools", "Web Development", "Soft Skills"
+  name     String
+  sortOrder Int   @default(0)
+}
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String
+  message   String   @db.Text
+  createdAt DateTime @default(now())
+  isRead    Boolean  @default(false)
+}
