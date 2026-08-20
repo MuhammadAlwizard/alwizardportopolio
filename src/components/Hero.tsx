@@ -1,13 +1,14 @@
-import Image from "next/image";
-import { FiMail, FiPhone, FiMapPin, FiArrowDownRight } from "react-icons/fi";
-import { FaLinkedin } from "react-icons/fa";
 
+import Image from "next/image";
+import { FiMail, FiPhone, FiMapPin, FiArrowDownRight, FiDownload } from "react-icons/fi";
+import { FaLinkedin } from "react-icons/fa";
+ 
 export default function Hero() {
   return (
     <section id="top" className="relative overflow-hidden pt-32 pb-24 md:pt-40 md:pb-32">
       <div className="absolute inset-0 grain-bg opacity-40 pointer-events-none" />
       <div className="absolute -top-40 -right-40 w-[32rem] h-[32rem] rounded-full bg-gold-500/10 blur-3xl pointer-events-none" />
-
+ 
       <div className="max-w-6xl mx-auto px-6 md:px-10 relative grid md:grid-cols-[1.3fr_0.9fr] gap-12 items-center">
         <div>
           <p className="eyebrow mb-6">Information Systems · UNIKOM</p>
@@ -22,7 +23,7 @@ export default function Hero() {
             database-driven solutions, with additional experience in web
             development and visual content.
           </p>
-
+ 
           <div className="flex flex-wrap items-center gap-4">
             <a
               href="#projects"
@@ -36,8 +37,15 @@ export default function Hero() {
             >
               Get in Touch
             </a>
+            <a
+              href="/cv.pdf"
+              download
+              className="inline-flex items-center gap-2 rounded-full border border-ivory/20 px-6 py-3 text-ivory hover:border-gold-500/60 hover:text-gold-500 transition-colors"
+            >
+              <FiDownload /> Download CV
+            </a>
           </div>
-
+ 
           <dl className="mt-14 grid grid-cols-3 gap-6 max-w-md text-sm">
             <div className="flex items-center gap-2 text-ivory/60">
               <FiMail className="text-gold-500 shrink-0" />
@@ -55,7 +63,7 @@ export default function Hero() {
             </div>
           </dl>
         </div>
-
+ 
         <div className="relative mx-auto">
           <div className="absolute -inset-4 rounded-[2rem] border border-gold-500/20" />
           <div className="relative w-64 sm:w-80 aspect-[4/5] rounded-3xl overflow-hidden card-surface">
@@ -81,3 +89,4 @@ export default function Hero() {
     </section>
   );
 }
+ 
