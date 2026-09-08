@@ -1,5 +1,5 @@
-import Image from "next/image";
 import { getCertificates } from "@/lib/data";
+import ImageSlideshow from "./ImageSlideshow";
 
 export default async function Certificates() {
   const certificates = await getCertificates();
@@ -17,11 +17,10 @@ export default async function Certificates() {
             <div key={c.id} className="card-surface rounded-2xl overflow-hidden group">
               {c.image && (
                 <div className="relative aspect-[4/3] overflow-hidden">
-                  <Image
-                    src={c.image}
+                  <ImageSlideshow
+                    images={[{ url: c.image, caption: c.title }]}
                     alt={c.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    intervalMs={3000}
                   />
                 </div>
               )}
