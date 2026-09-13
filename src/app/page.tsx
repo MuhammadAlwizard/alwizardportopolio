@@ -7,6 +7,8 @@ import Projects from "@/components/Projects";
 import Certificates from "@/components/Certificates";
 import Contact from "@/components/Contact";
 
+export const dynamic = "force-dynamic";
+
 export default function Home() {
   return (
     <main>
