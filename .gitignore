@@ -6,3 +6,16 @@ out
 build
 *.log
 .DS_Store
+
+# Public-repo guard (see CLAUDE.md)
+.env.*
+!.env.example
+dist
+coverage
+.claude
+*.zip
+*.tar
+*.sql
+*.pem
+*.key
+Thumbs.db

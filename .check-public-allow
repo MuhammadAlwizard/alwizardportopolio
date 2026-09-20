@@ -1,0 +1,4 @@
+# The owner's own contact details are shown on purpose on their portfolio site (decided 2026-09-20).
+# These files skip the e-mail / phone content checks. Forbidden-path and secret checks still apply.
+^src/components/(Contact|Hero|Footer)\.tsx$
+^\.env\.example$
