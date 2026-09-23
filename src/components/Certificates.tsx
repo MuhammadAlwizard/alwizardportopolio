@@ -1,44 +1,46 @@
+import Image from "next/image";
 import { getCertificates } from "@/lib/data";
-import ImageSlideshow from "./ImageSlideshow";
+import Slider from "./Slider";
 
 export default async function Certificates() {
   const certificates = await getCertificates();
+  if (certificates.length === 0) return null;
 
   return (
-    <section id="certificates" className="py-24 md:py-32 border-t border-gold-500/10">
-      <div className="max-w-6xl mx-auto px-6 md:px-10">
-        <p className="eyebrow mb-4">07 · Credentials</p>
-        <h2 className="section-title text-3xl md:text-4xl text-ivory mb-14 max-w-xl">
-          Certificates &amp; Training
-        </h2>
-
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {certificates.map((c) => (
-            <div key={c.id} className="card-surface rounded-2xl overflow-hidden group">
-              {c.image && (
-                <div className="relative aspect-[4/3] overflow-hidden">
-                  <ImageSlideshow
-                    images={[{ url: c.image, caption: c.title }]}
-                    alt={c.title}
-                    intervalMs={3000}
-                  />
-                </div>
-              )}
-              <div className="p-5">
-                <h3 className="font-display text-lg text-ivory mb-1">{c.title}</h3>
-                <p className="text-gold-500 text-sm mb-1">{c.issuer}</p>
-                {c.date && <p className="text-ivory/40 text-xs mb-2">{c.date}</p>}
-                {c.description && (
-                  <p className="text-ivory/60 text-sm leading-relaxed">{c.description}</p>
-                )}
-              </div>
-            </div>
-          ))}
-
-          {certificates.length === 0 && (
-            <p className="text-ivory/40 text-sm">Belum ada sertifikat.</p>
-          )}
+    <section id="certificates" className="py-20 md:py-28 border-t border-line">
+      <div className="max-w-6xl mx-auto px-5 md:px-10">
+        <div className="flex flex-wrap items-end justify-between gap-4 mb-10">
+          <h2 className="font-display font-semibold tracking-tight text-4xl md:text-5xl leading-none">
+            Certificates
+          </h2>
+          <p className="meta">{certificates.length} certificates and trainings</p>
         </div>
+
+        <Slider label="Certificates">
+          {certificates.map((c) => (
+            <figure
+              key={c.id}
+              className="w-[78%] sm:w-[44%] lg:w-[30%] rounded-card border border-line bg-paper-raised overflow-hidden"
+            >
+              <div className="relative aspect-[4/3] bg-paper border-b border-line">
+                {c.image ? (
+                  <Image
+                    src={c.image}
+                    alt={`${c.title} certificate`}
+                    fill
+                    sizes="(min-width: 1024px) 30vw, 78vw"
+                    className="object-contain p-4"
+                  />
+                ) : null}
+              </div>
+              <figcaption className="p-5">
+                <p className="font-display font-semibold leading-snug">{c.title}</p>
+                <p className="text-sm text-ink-soft mt-1">{c.issuer}</p>
+                {c.date && <p className="meta mt-2">{c.date}</p>}
+              </figcaption>
+            </figure>
+          ))}
+        </Slider>
       </div>
     </section>
   );

@@ -11,11 +11,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-/// Kategori project: dipakai untuk filter di halaman /projects
+/// Kategori project. FREELANCE tampil di bagian "Client work",
+/// kategori lain tampil di bagian "Projects".
 enum ProjectCategory {
   ACADEMIC
   WORK
   PERSONAL
+  FREELANCE
 }
 
 /// Status pendidikan: ongoing = masih kuliah, GRADUATED = sudah lulus

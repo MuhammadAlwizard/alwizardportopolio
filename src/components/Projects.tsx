@@ -1,173 +1,97 @@
 import Image from "next/image";
-import { getProjects } from "@/lib/data";
+import type { ProjectWithImages } from "@/lib/data";
+import { galleryOf, splitTitle, stackOf } from "@/lib/project-view";
 import ImageSlideshow from "./ImageSlideshow";
+import Slider from "./Slider";
 
 const categoryLabel: Record<string, string> = {
-  ACADEMIC: "Academic Project",
-  WORK: "Work Portfolio",
-  PERSONAL: "Personal Project",
+  ACADEMIC: "Academic",
+  WORK: "Work",
+  PERSONAL: "Personal",
 };
 
-export default async function Projects() {
-  const projects = await getProjects();
-  const topProjects = projects.filter((p) => p.featured);
-  const sideProjects = projects.filter((p) => !p.featured);
+export default function Projects({ projects }: { projects: ProjectWithImages[] }) {
+  if (projects.length === 0) return null;
+
+  const selected = projects.filter((p) => p.featured);
+  const side = projects.filter((p) => !p.featured);
 
   return (
-    <section id="projects" className="py-24 md:py-32 border-t border-gold-500/10 bg-navy-950/40">
-      <div className="max-w-6xl mx-auto px-6 md:px-10">
-        <p className="eyebrow mb-4">06 · Selected Work</p>
-        <h2 className="section-title text-3xl md:text-4xl text-ivory mb-14 max-w-xl">
-          Projects
-        </h2>
-
-        {/* ===== TOP PROJECTS — showcase besar ===== */}
-        <div className="space-y-16">
-          {topProjects.map((p, idx) => {
-            const stackList = p.stack.split(",").map((s) => s.trim()).filter(Boolean);
-            const gallery = p.images.length > 0 ? p.images : p.coverImage ? [{ id: 0, url: p.coverImage, caption: p.title }] : [];
-            const reversed = idx % 2 === 1;
-
-            return (
-              <article
-                key={p.id}
-                id={p.slug}
-                className={`grid lg:grid-cols-2 gap-10 items-center ${
-                  reversed ? "lg:[&>*:first-child]:order-2" : ""
-                }`}
-              >
-                <div>
-                  <p className="text-xs uppercase tracking-wider text-gold-500 mb-3">
-                    {categoryLabel[p.category] ?? p.category}
-                    {p.period ? ` · ${p.period}` : ""}
-                  </p>
-                  <h3 className="font-display text-2xl md:text-3xl text-ivory mb-4">
-                    {p.title}
-                  </h3>
-                  <p className="text-ivory/70 leading-relaxed mb-4">{p.summary}</p>
-
-                  {p.businessProblem && (
-                    <div className="mb-4">
-                      <p className="text-ivory/40 text-xs uppercase tracking-wider mb-1">
-                        Business Problem
-                      </p>
-                      <p className="text-ivory/65 text-sm leading-relaxed">
-                        {p.businessProblem}
-                      </p>
-                    </div>
-                  )}
-
-                  <p className="text-ivory/65 text-sm leading-relaxed mb-4">
-                    {p.description}
-                  </p>
-
-                  {p.result && (
-                    <p className="text-gold-500 text-sm font-medium mb-4">↳ {p.result}</p>
-                  )}
-
-                  {stackList.length > 0 && (
-                    <div className="flex flex-wrap gap-2">
-                      {stackList.map((s) => (
-                        <span
-                          key={s}
-                          className="text-xs rounded-full px-3 py-1.5 bg-navy-800 border border-gold-500/10 text-ivory/70"
-                        >
-                          {s}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                <div>
-                  {gallery.length > 0 ? (
-                    <div className={`grid gap-3 ${gallery.length > 1 ? "grid-cols-2" : "grid-cols-1"}`}>
-                      {gallery.slice(0, 4).map((img, i) => (
-                        <div
-                          key={img.id ?? i}
-                          className={`relative rounded-2xl overflow-hidden card-surface aspect-[4/3] ${
-                            gallery.length === 3 && i === 0 ? "col-span-2" : ""
-                          }`}
-                        >
-                          <Image
-                            src={img.url}
-                            alt={img.caption ?? p.title}
-                            fill
-                            className="object-cover"
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="rounded-2xl card-surface aspect-[4/3] flex items-center justify-center">
-                      <span className="text-ivory/30 text-sm">Gallery coming soon</span>
-                    </div>
-                  )}
-                </div>
-              </article>
-            );
-          })}
-
-          {topProjects.length === 0 && (
-            <p className="text-ivory/40 text-sm">
-              Belum ada project unggulan. Tandai project sebagai featured di database.
-            </p>
-          )}
+    <section id="projects" className="py-20 md:py-28 border-t border-line">
+      <div className="max-w-6xl mx-auto px-5 md:px-10">
+        <div className="flex flex-wrap items-end justify-between gap-4 mb-12">
+          <h2 className="font-display font-semibold tracking-tight text-4xl md:text-5xl leading-none">
+            Projects
+          </h2>
+          <p className="text-ink-soft max-w-sm">
+            Academic and work projects: system analysis, data mining, web systems and design.
+          </p>
         </div>
 
-        {/* ===== SIDE PROJECTS — grid kecil dengan slideshow ===== */}
-        {sideProjects.length > 0 && (
-          <div className="mt-24 pt-16 border-t border-gold-500/10">
-            <p className="eyebrow mb-4">More Work</p>
-            <h3 className="font-display text-2xl md:text-3xl text-ivory mb-10">
-              Side Projects
-            </h3>
+        {/* Index rows: meta, story, thumbnail */}
+        {selected.length > 0 && (
+          <ol className="border-t border-line">
+            {selected.map((p) => {
+              const { name, tagline } = splitTitle(p.title);
+              const cover = galleryOf(p)[0];
+              return (
+                <li key={p.id} id={p.slug} className="grid md:grid-cols-12 gap-5 md:gap-8 py-8 md:py-10 border-b border-line">
+                  <div className="md:col-span-2 meta pt-1">
+                    {categoryLabel[p.category] ?? p.category}
+                    {p.period ? <span className="block">{p.period}</span> : null}
+                  </div>
+                  <div className="md:col-span-6">
+                    <h3 className="font-display font-semibold text-2xl tracking-tight leading-tight">{name}</h3>
+                    {tagline && <p className="text-ink-soft mt-1">{tagline}</p>}
+                    <p className="text-ink-soft leading-relaxed mt-4">{p.summary}</p>
+                    {p.result && <p className="mt-4 text-sm border-l-2 border-accent pl-4">{p.result}</p>}
+                    <p className="meta mt-4">{stackOf(p).join(" / ")}</p>
+                  </div>
+                  <div className="md:col-span-4">
+                    {cover && (
+                      <div className="relative aspect-[16/10] rounded-card overflow-hidden border border-line bg-paper-raised">
+                        <Image
+                          src={cover.url}
+                          alt={cover.caption ?? p.title}
+                          fill
+                          sizes="(min-width: 768px) 30vw, 100vw"
+                          className="object-cover object-left-top"
+                        />
+                      </div>
+                    )}
+                  </div>
+                </li>
+              );
+            })}
+          </ol>
+        )}
 
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {sideProjects.map((p) => {
-                const stackList = p.stack.split(",").map((s) => s.trim()).filter(Boolean);
-                const gallery =
-                  p.images.length > 0
-                    ? p.images.map((img) => ({ url: img.url, caption: img.caption }))
-                    : p.coverImage
-                    ? [{ url: p.coverImage, caption: p.title }]
-                    : [];
-
+        {side.length > 0 && (
+          <div className={selected.length > 0 ? "mt-16" : ""}>
+            <h3 className="font-display font-semibold text-2xl tracking-tight mb-6">Side projects</h3>
+            <Slider label="Side projects">
+              {side.map((p) => {
+                const { name } = splitTitle(p.title);
                 return (
-                  <div
+                  <article
                     key={p.id}
                     id={p.slug}
-                    className="card-surface rounded-2xl overflow-hidden group"
+                    className="w-[82%] sm:w-[46%] lg:w-[31%] rounded-card border border-line bg-paper-raised overflow-hidden"
                   >
-                    <div className="relative aspect-[4/3] overflow-hidden bg-navy-800">
-                      <ImageSlideshow images={gallery} alt={p.title} intervalMs={3000} />
+                    <div className="relative aspect-[4/3] border-b border-line">
+                      <ImageSlideshow images={galleryOf(p)} alt={p.title} sizes="(min-width: 1024px) 30vw, 80vw" />
                     </div>
                     <div className="p-5">
-                      <p className="text-[11px] uppercase tracking-wider text-gold-500 mb-2">
-                        {categoryLabel[p.category] ?? p.category}
-                        {p.period ? ` · ${p.period}` : ""}
+                      <p className="meta mb-2">
+                        {[categoryLabel[p.category] ?? p.category, p.period].filter(Boolean).join(" · ")}
                       </p>
-                      <h4 className="font-display text-lg text-ivory mb-2">{p.title}</h4>
-                      <p className="text-ivory/60 text-sm leading-relaxed mb-3 line-clamp-3">
-                        {p.summary}
-                      </p>
-                      {stackList.length > 0 && (
-                        <div className="flex flex-wrap gap-1.5">
-                          {stackList.slice(0, 3).map((s) => (
-                            <span
-                              key={s}
-                              className="text-[11px] rounded-full px-2.5 py-1 bg-navy-800 border border-gold-500/10 text-ivory/60"
-                            >
-                              {s}
-                            </span>
-                          ))}
-                        </div>
-                      )}
+                      <h4 className="font-display font-semibold text-lg leading-snug">{name}</h4>
+                      <p className="text-ink-soft text-sm leading-relaxed mt-2 line-clamp-3">{p.summary}</p>
                     </div>
-                  </div>
+                  </article>
                 );
               })}
-            </div>
+            </Slider>
           </div>
         )}
       </div>

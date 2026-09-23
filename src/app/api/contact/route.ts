@@ -1,14 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
+const LIMITS = { name: 100, email: 150, message: 3000 };
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { name, email, message } = body;
+    const name = typeof body?.name === "string" ? body.name.trim() : "";
+    const email = typeof body?.email === "string" ? body.email.trim() : "";
+    const message = typeof body?.message === "string" ? body.message.trim() : "";
 
     if (!name || !email || !message) {
       return NextResponse.json(
-        { error: "Nama, email, dan pesan wajib diisi." },
+        { error: "Name, email and message are required." },
+        { status: 400 }
+      );
+    }
+
+    if (name.length > LIMITS.name || email.length > LIMITS.email || message.length > LIMITS.message) {
+      return NextResponse.json(
+        { error: "The message is too long." },
         { status: 400 }
       );
     }
@@ -16,7 +27,7 @@ export async function POST(req: NextRequest) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return NextResponse.json(
-        { error: "Format email tidak valid." },
+        { error: "Please enter a valid email address." },
         { status: 400 }
       );
     }
@@ -29,7 +40,7 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     console.error(err);
     return NextResponse.json(
-      { error: "Terjadi kesalahan pada server." },
+      { error: "Something went wrong on the server. Please email me directly." },
       { status: 500 }
     );
   }

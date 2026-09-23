@@ -4,24 +4,26 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
 }
 
 body {
-  background-color: #0B1120;
-  color: #F3EFE6;
+  background-color: #F3F2EE;
+  color: #17181C;
 }
 
 ::selection {
-  background-color: #D4AF5A;
-  color: #0B1120;
+  background-color: #C23B17;
+  color: #FBFAF8;
 }
 
 /* Focus visibility for keyboard users */
 a:focus-visible,
 button:focus-visible,
+summary:focus-visible,
 input:focus-visible,
 textarea:focus-visible {
-  outline: 2px solid #D4AF5A;
+  outline: 2px solid #C23B17;
   outline-offset: 3px;
 }
 
@@ -40,26 +42,35 @@ textarea:focus-visible {
   text-wrap: balance;
 }
 
-.eyebrow {
-  letter-spacing: 0.2em;
+/* Small monospace line for dates, stacks and other metadata */
+.meta {
+  font-family: var(--font-mono);
   font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  color: #D4AF5A;
+  letter-spacing: 0.02em;
+  color: #6E717A;
 }
 
-.section-title {
-  font-family: var(--font-display);
-  font-weight: 600;
-  line-height: 1.05;
+/* Horizontal slider track: native swipe on touch, snaps per card */
+.slider-track {
+  display: flex;
+  gap: 1.25rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+.slider-track::-webkit-scrollbar {
+  display: none;
+}
+.slider-track > * {
+  scroll-snap-align: start;
+  flex: 0 0 auto;
 }
 
-.card-surface {
-  background-color: #111A2E;
-  border: 1px solid rgba(212, 175, 90, 0.12);
+details > summary {
+  list-style: none;
+  cursor: pointer;
 }
-
-.grain-bg {
-  background-image: radial-gradient(circle at 1px 1px, rgba(212,175,90,0.06) 1px, transparent 0);
-  background-size: 28px 28px;
+details > summary::-webkit-details-marker {
+  display: none;
 }

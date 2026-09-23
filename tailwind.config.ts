@@ -8,26 +8,28 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        navy: {
-          950: "#070B14",
-          900: "#0B1120",
-          800: "#111A2E",
-          700: "#1A2740",
-          600: "#243453",
+        paper: {
+          DEFAULT: "#F3F2EE",
+          raised: "#FBFAF8",
         },
-        gold: {
-          400: "#E8C77E",
-          500: "#D4AF5A",
-          600: "#B8924A",
+        ink: {
+          DEFAULT: "#17181C",
+          soft: "#4A4D55",
+          faint: "#6E717A",
         },
-        ivory: "#F3EFE6",
+        line: "#D9D7D0",
+        accent: {
+          DEFAULT: "#C23B17",
+          dark: "#9E2F11",
+        },
       },
       fontFamily: {
         display: ["var(--font-display)"],
         body: ["var(--font-body)"],
+        mono: ["var(--font-mono)"],
       },
-      backgroundImage: {
-        "grain": "radial-gradient(circle at 1px 1px, rgba(212,175,90,0.08) 1px, transparent 0)",
+      borderRadius: {
+        card: "6px",
       },
     },
   },
