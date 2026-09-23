@@ -11,11 +11,12 @@ const config: Config = {
         paper: {
           DEFAULT: "#F3F2EE",
           raised: "#FBFAF8",
+          deep: "#E8E6DF",
         },
         ink: {
           DEFAULT: "#17181C",
-          soft: "#4A4D55",
-          faint: "#6E717A",
+          soft: "#45484F",
+          faint: "#62656D",
         },
         line: "#D9D7D0",
         accent: {

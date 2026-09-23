@@ -1,8 +1,7 @@
 import Image from "next/image";
 import type { ProjectWithImages } from "@/lib/data";
 import { galleryOf, splitTitle, stackOf } from "@/lib/project-view";
-import ImageSlideshow from "./ImageSlideshow";
-import Slider from "./Slider";
+import MarqueeGallery from "./MarqueeGallery";
 
 const categoryLabel: Record<string, string> = {
   ACADEMIC: "Academic",
@@ -66,35 +65,26 @@ export default function Projects({ projects }: { projects: ProjectWithImages[] }
           </ol>
         )}
 
-        {side.length > 0 && (
-          <div className={selected.length > 0 ? "mt-16" : ""}>
-            <h3 className="font-display font-semibold text-2xl tracking-tight mb-6">Side projects</h3>
-            <Slider label="Side projects">
-              {side.map((p) => {
-                const { name } = splitTitle(p.title);
-                return (
-                  <article
-                    key={p.id}
-                    id={p.slug}
-                    className="w-[82%] sm:w-[46%] lg:w-[31%] rounded-card border border-line bg-paper-raised overflow-hidden"
-                  >
-                    <div className="relative aspect-[4/3] border-b border-line">
-                      <ImageSlideshow images={galleryOf(p)} alt={p.title} sizes="(min-width: 1024px) 30vw, 80vw" />
-                    </div>
-                    <div className="p-5">
-                      <p className="meta mb-2">
-                        {[categoryLabel[p.category] ?? p.category, p.period].filter(Boolean).join(" · ")}
-                      </p>
-                      <h4 className="font-display font-semibold text-lg leading-snug">{name}</h4>
-                      <p className="text-ink-soft text-sm leading-relaxed mt-2 line-clamp-3">{p.summary}</p>
-                    </div>
-                  </article>
-                );
-              })}
-            </Slider>
-          </div>
-        )}
       </div>
+
+      {side.length > 0 && (
+        <div className={selected.length > 0 ? "mt-16" : ""}>
+          <div className="max-w-6xl mx-auto px-5 md:px-10 flex flex-wrap items-end justify-between gap-2 mb-6">
+            <h3 className="font-display font-semibold text-2xl tracking-tight">Side projects</h3>
+            <p className="meta">Hover to pause, click to open</p>
+          </div>
+          <MarqueeGallery
+            label="Side projects"
+            items={side.map((p) => ({
+              id: p.id,
+              title: splitTitle(p.title).name,
+              subtitle: [categoryLabel[p.category] ?? p.category, p.period].filter(Boolean).join(" · "),
+              description: p.summary,
+              images: galleryOf(p),
+            }))}
+          />
+        </div>
+      )}
     </section>
   );
 }

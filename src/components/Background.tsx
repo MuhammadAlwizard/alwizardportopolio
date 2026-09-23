@@ -9,7 +9,7 @@ export default async function Background() {
   const skillGroups = Object.entries(skills);
 
   return (
-    <section id="background" className="py-20 md:py-28 border-t border-line bg-paper-raised">
+    <section id="background" className="py-20 md:py-28 border-t border-line bg-paper-deep tex-grid">
       <div className="max-w-6xl mx-auto px-5 md:px-10 grid md:grid-cols-12 gap-12 md:gap-8">
         <div className="md:col-span-4">
           <div className="md:sticky md:top-24">

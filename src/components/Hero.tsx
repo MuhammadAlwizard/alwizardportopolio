@@ -3,7 +3,7 @@ import { FiArrowDownRight, FiDownload } from "react-icons/fi";
 
 export default function Hero() {
   return (
-    <section id="top" className="pt-14 pb-20 md:pt-24 md:pb-28">
+    <section id="top" className="tex-grid pt-14 pb-20 md:pt-24 md:pb-28">
       <div className="max-w-6xl mx-auto px-5 md:px-10 grid md:grid-cols-12 gap-10 md:gap-8 items-end">
         <div className="md:col-span-8">
           <p className="meta mb-6">Muhammad Alwizard · Bandung, Indonesia</p>

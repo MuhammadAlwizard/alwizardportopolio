@@ -64,8 +64,15 @@ export default function ClientWork({ projects }: { projects: ProjectWithImages[]
   const names = projects.map((p) => splitTitle(p.title).name);
 
   return (
-    <section id="work" className="py-20 md:py-28 border-t border-line">
-      <div className="max-w-6xl mx-auto px-5 md:px-10">
+    <section id="work" className="relative overflow-hidden py-20 md:py-28 border-t border-line bg-paper-deep tex">
+      {/* D: oversized word behind the section header */}
+      <p
+        aria-hidden="true"
+        className="pointer-events-none select-none absolute -top-[0.12em] -right-[0.04em] font-display font-bold leading-none tracking-tighter text-[34vw] md:text-[22rem] text-ink/[0.045]"
+      >
+        WORK
+      </p>
+      <div className="relative max-w-6xl mx-auto px-5 md:px-10">
         <div className="grid md:grid-cols-12 gap-6 mb-14 md:mb-20">
           <h2 className="md:col-span-6 font-display font-semibold tracking-tight text-4xl md:text-6xl leading-none">
             Client work

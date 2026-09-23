@@ -45,7 +45,7 @@ export default function Contact() {
   }
 
   return (
-    <section id="contact" className="py-20 md:py-28 border-t border-line">
+    <section id="contact" className="py-20 md:py-28 border-t border-line bg-paper-deep tex">
       <div className="max-w-6xl mx-auto px-5 md:px-10 grid md:grid-cols-12 gap-12 md:gap-8">
         <div className="md:col-span-6">
           <h2 className="font-display font-semibold tracking-tight text-4xl md:text-6xl leading-[1.02] text-balance mb-6">
