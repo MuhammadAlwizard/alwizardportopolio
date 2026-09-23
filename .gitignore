@@ -19,3 +19,4 @@ coverage
 *.pem
 *.key
 Thumbs.db
+*.tsbuildinfo
